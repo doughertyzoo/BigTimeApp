@@ -61,7 +61,7 @@ namespace BigTimeApi.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             await Task.CompletedTask;
             _customerService.Delete(id);

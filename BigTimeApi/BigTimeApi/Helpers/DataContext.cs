@@ -8,11 +8,6 @@ namespace BigTimeApi
     {
         protected readonly IConfiguration Configuration;
 
-        public DataContext()
-        {
-            // Default constructor
-        }
-
         public DataContext(IConfiguration configuration)
         {
             Configuration = configuration;
