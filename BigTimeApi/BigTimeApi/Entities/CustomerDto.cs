@@ -1,6 +1,6 @@
 ﻿namespace BigTimeApi
 {
-    internal class Customer : ICustomer
+    public class CustomerDto : ICustomer
     {
         public int? CustomerId { get; set; }
         public string? FirstName { get; set; }
