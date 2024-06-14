@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 # Transient db files for this repo
 BigTimeApi/BigTimeApi/bigtime.db
+*.db
