@@ -45,10 +45,11 @@ namespace BigTimeApi.Controllers
         }
 
         [HttpPut]
-        [Route("update")]
-        public async Task<IActionResult> Update(UpdateCustomerRequestModel model)
+        [Route("update/{id}")]
+        public async Task<IActionResult> Update(int id, UpdateCustomerRequestModel model)
         {
             await Task.CompletedTask;
+            model.CustomerId = id;
             _customerService.Update(model);
             return Ok(new { message = "Customer updated" });
         }

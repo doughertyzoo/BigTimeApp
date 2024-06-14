@@ -9,7 +9,7 @@
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 CompanyName = model.CompanyName,
-                Address = CreateAddress(model)
+                Address = model.Address ?? new Address()
             };
         }
 
@@ -21,18 +21,7 @@
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 CompanyName = model.CompanyName,
-                Address = CreateAddress(model)
-            };
-        }
-
-        private Address CreateAddress(BaseCustomerRequestModel model)
-        {
-            return new Address
-            {
-                Street = model.Street,
-                City = model.City,
-                State = model.State,
-                Zip = model.Zip
+                Address = model.Address ?? new Address()
             };
         }
     }
