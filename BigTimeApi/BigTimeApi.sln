@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigTimeApi", "BigTimeApi\BigTimeApi.csproj", "{D63AE46B-C66E-443C-92B3-082930DF4469}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D63AE46B-C66E-443C-92B3-082930DF4469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63AE46B-C66E-443C-92B3-082930DF4469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63AE46B-C66E-443C-92B3-082930DF4469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63AE46B-C66E-443C-92B3-082930DF4469}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C790E85-3225-435F-BD41-AA649184E247}
+	EndGlobalSection
+EndGlobal

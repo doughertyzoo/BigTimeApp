@@ -1,0 +1,6 @@
+@BigTimeApi_HostAddress = http://localhost:5258
+
+GET {{BigTimeApi_HostAddress}}/customer/get-all/
+Accept: application/json
+
+###
