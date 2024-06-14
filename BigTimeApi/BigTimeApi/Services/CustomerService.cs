@@ -1,14 +1,14 @@
-﻿using AutoMapper;
-
-namespace BigTimeApi
+﻿namespace BigTimeApi
 {
     public class CustomerService : ICustomerService
     {
         private ICustomerRepository _customerRepository;
+        private ICustomerFactory _customerFactory;
 
-        public CustomerService(ICustomerRepository customerRepository)
+        public CustomerService(ICustomerRepository customerRepository, ICustomerFactory customerFactory)
         {
             _customerRepository = customerRepository;
+            _customerFactory = customerFactory;
         }
 
         public void Delete(int id)
@@ -36,6 +36,18 @@ namespace BigTimeApi
         {
             var customer = _customerRepository.GetNewCustomer();
             return customer;
+        }
+
+        public void Create(CreateCustomerRequestModel model)
+        {
+            ICustomer? customer = _customerFactory.CreateCustomer(model);
+            Save(customer);
+        }
+
+        public void Update(UpdateCustomerRequestModel model)
+        {
+            ICustomer? customer = _customerFactory.CreateCustomer(model);
+            Save(customer);
         }
 
         public void Save(ICustomer customer)

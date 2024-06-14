@@ -5,7 +5,8 @@
         IEnumerable<ICustomer> GetList();
         ICustomer GetNewCustomer();
         ICustomer? GetCustomerById(int id);
-        void Save(ICustomer customer);
+        void Create(CreateCustomerRequestModel model);
+        void Update(UpdateCustomerRequestModel model);
         void Delete(int id);
     }
 }

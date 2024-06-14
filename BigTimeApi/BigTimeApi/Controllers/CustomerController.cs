@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BigTimeApi.Controllers
@@ -8,16 +7,13 @@ namespace BigTimeApi.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ILogger<CustomerController> _logger;
-        private readonly IMapper _mapper;
         private ICustomerService _customerService;
 
         public CustomerController(
             ILogger<CustomerController> logger,
-            IMapper mapper,
             ICustomerService customerService)
         {
             _logger = logger;
-            _mapper = mapper;
             _customerService = customerService;
         }
 
@@ -41,21 +37,19 @@ namespace BigTimeApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(CreateCustomerForm model)
+        public async Task<IActionResult> Create(CreateCustomerRequestModel model)
         {
             await Task.CompletedTask;
-            var customer = _mapper.Map<Customer>(model);
-            _customerService.Save(customer);
+            _customerService.Create(model);
             return Ok(new { message = "Customer created" });
         }
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(UpdateCustomerForm model)
+        public async Task<IActionResult> Update(UpdateCustomerRequestModel model)
         {
             await Task.CompletedTask;
-            var customer = _mapper.Map<Customer>(model);
-            _customerService.Save(customer);
+            _customerService.Update(model);
             return Ok(new { message = "Customer updated" });
         }
 

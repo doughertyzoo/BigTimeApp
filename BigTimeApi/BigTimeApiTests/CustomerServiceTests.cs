@@ -1,4 +1,5 @@
 using BigTimeApi;
+using Castle.Core.Resource;
 using Moq;
 
 namespace BitTimeApiTests
@@ -7,20 +8,23 @@ namespace BitTimeApiTests
     public class CustomerServiceTests
     {
         private Mock<ICustomerRepository>? _mockCustomerRepository;
+        private Mock<ICustomerFactory>? _mockCustomerFactory;
         private ICustomerService? _customerService;
 
         [TestInitialize]
         public void Setup()
         {
             _mockCustomerRepository = new Mock<ICustomerRepository>();
-            _customerService = new CustomerService(_mockCustomerRepository.Object);
+            _mockCustomerFactory = new Mock<ICustomerFactory>();
+            _customerService = new CustomerService(_mockCustomerRepository.Object, _mockCustomerFactory.Object);
         }
 
         [TestMethod]
         public void Delete_CustomerExists_DeletesSuccessfully()
         {
             var customerId = 1;
-            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns(new Customer { CustomerId = customerId });
+            ICustomer customer = new CustomerDto { CustomerId = customerId };
+            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns(customer);
             _customerService!.Delete(customerId);
             _mockCustomerRepository.Verify(repo => repo.Delete(customerId), Times.Once);
         }
@@ -37,10 +41,10 @@ namespace BitTimeApiTests
         public void GetCustomerById_ValidId_ReturnsCustomer()
         {
             var customerId = 1;
-            var expectedCustomer = new Customer { CustomerId = customerId };
-            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns(expectedCustomer);
+            ICustomer customer = new CustomerDto { CustomerId = customerId };
+            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns(customer);
             var result = _customerService!.GetCustomerById(customerId);
-            Assert.AreEqual(expectedCustomer, result);
+            Assert.AreEqual(customer, result);
         }
 
         [TestMethod]
@@ -55,10 +59,10 @@ namespace BitTimeApiTests
         [TestMethod]
         public void GetList_ReturnsListOfCustomers()
         {
-            var expectedCustomers = new List<ICustomer>
+            List<ICustomer> expectedCustomers = new List<ICustomer>
             {
-                new Customer { CustomerId = 1 },
-                new Customer { CustomerId = 2 }
+                new CustomerDto { CustomerId = 1 },
+                new CustomerDto { CustomerId = 2 }
             };
             _mockCustomerRepository!.Setup(repo => repo.GetList()).Returns(expectedCustomers);
             var result = _customerService!.GetList().ToList();
@@ -68,47 +72,69 @@ namespace BitTimeApiTests
         [TestMethod]
         public void GetNewCustomer_ReturnsNewCustomer()
         {
-            var expectedCustomer = new Customer();
-            _mockCustomerRepository!.Setup(repo => repo.GetNewCustomer()).Returns(expectedCustomer);
+            ICustomer customer = new CustomerDto();
+            _mockCustomerRepository!.Setup(repo => repo.GetNewCustomer()).Returns(customer);
             var result = _customerService!.GetNewCustomer();
-            Assert.AreEqual(expectedCustomer, result);
+            Assert.AreEqual(customer, result);
         }
 
         [TestMethod]
-        public void Save_NewCustomerWithMissingLastName_ThrowsException()
+        public void Create_MissingLastName_ThrowsException()
         {
-            var customer = new Customer { CompanyName = "WWW" };
-            Assert.ThrowsException<AppException>(() => _customerService!.Save(customer));
+            ICustomer customer = new CustomerDto { CompanyName = "WWW" };
+            CreateCustomerRequestModel mockModel = new();
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
+            Assert.ThrowsException<AppException>(() => _customerService!.Create(mockModel));
         }
 
         [TestMethod]
-        public void Save_NewCustomerWithMissingCompanyName_ThrowsException()
+        public void Create_MissingCompanyName_ThrowsException()
         {
-            var customer = new Customer { LastName = "WWW" };
-            Assert.ThrowsException<AppException>(() => _customerService!.Save(customer));
+            ICustomer customer = new CustomerDto { LastName = "WWW" };
+            CreateCustomerRequestModel mockModel = new();
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
+            Assert.ThrowsException<AppException>(() => _customerService!.Create(mockModel));
         }
 
         [TestMethod]
-        public void Save_NewCustomerWithMissingLastAndCompanyName_ThrowsException()
+        public void Create_MissingLastAndCompanyName_ThrowsException()
         {
-            var customer = new Customer();
-            Assert.ThrowsException<AppException>(() => _customerService!.Save(customer));
+            ICustomer customer = new CustomerDto();
+            CreateCustomerRequestModel mockModel = new();
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
+            Assert.ThrowsException<AppException>(() => _customerService!.Create(mockModel));
         }
 
         [TestMethod]
-        public void Save_ExistingCustomerThatDoesNotExist_ThrowsException()
+        public void Create_ExistingCustomerExists_SavesSuccessfully()
         {
-            var customer = new Customer { CustomerId = 1, LastName = "QQQ", CompanyName = "WWW" };
-            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customer.CustomerId.Value)).Returns((ICustomer)null);
-            Assert.ThrowsException<AppException>(() => _customerService!.Save(customer));
+            ICustomer customer = new CustomerDto { LastName = "QQQ", CompanyName = "WWW" };
+            CreateCustomerRequestModel mockModel = new();
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
+            _customerService!.Create(mockModel);
+            _mockCustomerRepository!.Verify(repo => repo.Save(customer), Times.Once);
         }
 
         [TestMethod]
-        public void Save_ExistingCustomerExists_SavesSuccessfully()
+        public void Update_ExistingCustomerThatDoesNotExist_ThrowsException()
         {
-            var customer = new Customer { CustomerId = 1, LastName = "QQQ", CompanyName = "WWW" };
-            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customer.CustomerId.Value)).Returns(customer);
-            _customerService!.Save(customer);
+            var customerId = 1;
+            ICustomer customer = new CustomerDto { CustomerId = customerId, LastName = "QQQ", CompanyName = "WWW" };
+            UpdateCustomerRequestModel mockModel = new();
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
+            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns((ICustomer)null);
+            Assert.ThrowsException<AppException>(() => _customerService!.Update(mockModel));
+        }
+
+        [TestMethod]
+        public void Update_ExistingCustomerExists_SavesSuccessfully()
+        {
+            var customerId = 1;
+            ICustomer customer = new CustomerDto { CustomerId = customerId, LastName = "QQQ", CompanyName = "WWW" };
+            UpdateCustomerRequestModel mockModel = new();
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
+            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns(customer);
+            _customerService!.Update(mockModel);
             _mockCustomerRepository.Verify(repo => repo.Save(customer), Times.Once);
         }
     }

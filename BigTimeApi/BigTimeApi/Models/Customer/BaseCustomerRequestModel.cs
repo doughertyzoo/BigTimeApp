@@ -2,7 +2,7 @@
 
 namespace BigTimeApi
 {
-    public class CustomerFormBase
+    public class BaseCustomerRequestModel
     {
         public string? FirstName { get; set; }
         [Required]

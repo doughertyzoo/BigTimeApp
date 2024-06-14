@@ -6,7 +6,7 @@ namespace BigTimeApi
     {
         public AutoMapperProfile()
         {
-            CreateMap<CreateCustomerForm, Customer>()
+            CreateMap<CreateCustomerRequestModel, Customer>()
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address
                 {
                     Street = src.Street,
@@ -14,7 +14,7 @@ namespace BigTimeApi
                     State = src.State,
                     Zip = src.Zip
                 }));
-            CreateMap<UpdateCustomerForm, Customer>()
+            CreateMap<UpdateCustomerRequestModel, Customer>()
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address
                 {
                     Street = src.Street,

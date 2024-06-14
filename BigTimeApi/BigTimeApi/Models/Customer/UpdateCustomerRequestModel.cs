@@ -2,7 +2,7 @@
 
 namespace BigTimeApi
 {
-    public class UpdateCustomerForm : CustomerFormBase
+    public class UpdateCustomerRequestModel : BaseCustomerRequestModel
     {
         [Required]
         public int CustomerId { get; set; }
