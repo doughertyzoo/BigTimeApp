@@ -13,6 +13,10 @@ namespace BigTimeApi
 
         public void Delete(int id)
         {
+            if (_customerRepository.GetCustomerById(id) == null)
+            {
+                throw new AppException("Customer does not exist; cannot delete");
+            }
             _customerRepository.Delete(id);
         }
 
@@ -45,7 +49,7 @@ namespace BigTimeApi
             {
                 if (_customerRepository.GetCustomerById(customer.CustomerId.Value) == null)
                 {
-                    throw new AppException("Customer does not exist");
+                    throw new AppException("Customer does not exist; cannot update");
                 }
 
             }

@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Transient db files for this repo
+BigTimeApi/BigTimeApi/bigtime.db

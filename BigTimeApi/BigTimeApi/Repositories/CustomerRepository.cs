@@ -5,7 +5,7 @@ namespace BigTimeApi
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private DataContext _context;
+        private readonly DataContext _context;
 
         public CustomerRepository(DataContext context)
         {
@@ -14,7 +14,9 @@ namespace BigTimeApi
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using var connection = _context.CreateConnection();
+            string sql = "DELETE FROM Customer WHERE CustomerId = @CustomerId";
+            connection.Execute(sql, new { CustomerId = id });
         }
 
         public ICustomer? GetCustomerById(int id)

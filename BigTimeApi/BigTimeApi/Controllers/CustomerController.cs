@@ -58,5 +58,14 @@ namespace BigTimeApi.Controllers
             _customerService.Save(customer);
             return Ok(new { message = "Customer updated" });
         }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> Update(int id)
+        {
+            await Task.CompletedTask;
+            _customerService.Delete(id);
+            return Ok(new { message = "Customer deleted" });
+        }
     }
 }
