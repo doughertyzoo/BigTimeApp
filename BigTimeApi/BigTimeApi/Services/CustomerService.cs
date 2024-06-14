@@ -40,7 +40,7 @@ namespace BigTimeApi
 
         public void Save(ICustomer customer)
         {
-            if (string.IsNullOrWhiteSpace(customer.LastName) && string.IsNullOrWhiteSpace(customer.CompanyName))
+            if (string.IsNullOrWhiteSpace(customer.LastName) || string.IsNullOrWhiteSpace(customer.CompanyName))
             {
                 throw new AppException("Customer needs a LastName and a CompanyName");
             }

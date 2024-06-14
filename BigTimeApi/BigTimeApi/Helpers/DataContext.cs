@@ -8,12 +8,17 @@ namespace BigTimeApi
     {
         protected readonly IConfiguration Configuration;
 
+        public DataContext()
+        {
+            // Default constructor
+        }
+
         public DataContext(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IDbConnection CreateConnection()
+        public virtual IDbConnection CreateConnection()
         {
             return new SqliteConnection(Configuration.GetConnectionString("Default"));
         }
