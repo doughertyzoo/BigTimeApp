@@ -118,12 +118,9 @@ namespace BitTimeApiTests
         [TestMethod]
         public void Update_ExistingCustomerThatDoesNotExist_ThrowsException()
         {
-            var customerId = 1;
-            ICustomer customer = new CustomerDto { CustomerId = customerId, LastName = "QQQ", CompanyName = "WWW" };
             UpdateCustomerRequestModel mockModel = new();
-            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns(customer);
-            _mockCustomerRepository!.Setup(repo => repo.GetCustomerById(customerId)).Returns((ICustomer)null);
-            Assert.ThrowsException<AppException>(() => _customerService!.Update(mockModel));
+            _mockCustomerFactory!.Setup(fact => fact.CreateCustomer(mockModel)).Returns((ICustomer)null);
+            Assert.ThrowsException<KeyNotFoundException>(() => _customerService!.Update(mockModel));
         }
 
         [TestMethod]

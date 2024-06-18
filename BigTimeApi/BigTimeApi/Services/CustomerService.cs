@@ -52,6 +52,11 @@
 
         public void Save(ICustomer customer)
         {
+            if (customer == null)
+            {
+                throw new KeyNotFoundException("Customer does not exist");
+            }
+
             if (string.IsNullOrWhiteSpace(customer.LastName) || string.IsNullOrWhiteSpace(customer.CompanyName))
             {
                 throw new AppException("Customer needs a LastName and a CompanyName");
